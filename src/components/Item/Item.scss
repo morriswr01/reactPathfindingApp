@@ -1,0 +1,10 @@
+@import "../../styles/variables";
+
+.boardItem {
+    width: 35px;
+    height: 35px;
+    background-color: $purpleRain;
+    color: $freezePurple;
+    margin: 5px;
+    border-radius: 5px;
+}
