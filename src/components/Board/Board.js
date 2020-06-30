@@ -31,12 +31,7 @@ export default class Board extends React.Component {
         const startNode = grid[START_NODE_ROW][START_NODE_COL];
         const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
         // eslint-disable-next-line no-unused-vars
-        const visitedNodes = dijkstra(startNode, finishNode, grid);
-
-        visitedNodes.forEach((visitedNode) => {
-            const { rowID, colID } = visitedNode;
-            grid[rowID][colID].isVisited = true;
-        });
+        dijkstra(startNode, finishNode, grid);
 
         this.setState({ grid });
     }
@@ -58,7 +53,7 @@ export default class Board extends React.Component {
                                     colID,
                                     isStart,
                                     isFinish,
-                                    isVisited
+                                    isVisited,
                                 } = item;
                                 return (
                                     <Item
@@ -81,12 +76,6 @@ export default class Board extends React.Component {
                     >
                         Go!
                     </button>
-                    {/* <button
-                        className='showPathBtn'
-                        // onClick={() => this.showVisited()}
-                    >
-                        Show Visited Nodes
-                    </button> */}
                 </footer>
             </div>
         );

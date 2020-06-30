@@ -1,5 +1,5 @@
 export default function dijkstra(startNode, finishNode, grid) {
-    const visitedNodes = [];
+    // const visitedNodes = [];
     let unvisitedNodes = getAllNodes(grid);
     startNode.distance = 0;
 
@@ -8,16 +8,15 @@ export default function dijkstra(startNode, finishNode, grid) {
         const currentNode = unvisitedNodes.shift();
 
         // Check we are not trapped
-        if (currentNode.distance === Infinity) {
-            return visitedNodes;
-        }
+        if (currentNode.distance === Infinity) return;
 
         // Update state to show that current node has been visited
         currentNode.isVisited = true;
-        visitedNodes.push(currentNode);
+        // visitedNodes.push(currentNode);
 
         // Check if we are at the finish
-        if (currentNode === finishNode) return visitedNodes;
+        // if (currentNode === finishNode) return visitedNodes;
+        if (currentNode === finishNode) return;
 
         // Find and update neighbours
         unvisitedNodes.map((node) => {
@@ -33,8 +32,9 @@ export default function dijkstra(startNode, finishNode, grid) {
             }
             return node;
         });
+
+        getOptimalPath(finishNode);
     }
-    return visitedNodes;
 }
 
 const sortNodesByDisatnce = (unvisitedNodes) => {
@@ -53,29 +53,11 @@ const getAllNodes = (grid) => {
     return nodes;
 };
 
-// const updateUnvisitedNeighbours = (currentNode, grid) => {
-//     const unvisitedNeighbours = getUnvisitedNeighbours(currentNode, grid);
-
-//     // Take currentNode distance from start and add one to get neighbours distance
-//     unvisitedNeighbours.forEach((neighbour) => {
-//         neighbour.distance = currentNode.distance + 1;
-//         neighbour.previousNode = currentNode;
-//     });
-
-//     return unvisitedNeighbours;
-// };
-
-// const getUnvisitedNeighbours = (currentNode, grid) => {
-//     const neighbours = [];
-//     const { rowID, colID } = currentNode;
-//     // Find neighbour above
-//     if (rowID > 0) neighbours.push(grid[rowID - 1][colID]);
-//     // Find neighbour below
-//     if (rowID < grid.length - 1) neighbours.push(grid[rowID + 1][colID]);
-//     // Find neighbour left
-//     if (colID > 0) neighbours.push(grid[rowID][colID - 1]);
-//     // Find neighbour right
-//     if (colID < grid[0].length - 1) neighbours.push(grid[rowID][colID + 1]);
-
-//     return neighbours.filter((neighbour) => !neighbours.isVisited);
-// };
+const getOptimalPath = (finishNode) => {
+    const optimalPath = [];
+    console.log(optimalPath);
+    let currentNode = finishNode;
+    while (currentNode.previousNode) {
+        optimalPath.push(currentNode.previousNode);
+    }
+};
