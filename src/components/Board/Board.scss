@@ -1,12 +1,42 @@
 .board {
-    height: 90vh;
-    display: flex;
-    flex-direction: column;
-    margin: auto;
+    text-align: center;
+    .header {
+        height: 10vh;
+    }
 
-    &Row {
+    .grid {
+        height: 80vh;
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         justify-content: center;
+        margin: auto;
+
+        &Row {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+    }
+    .footer {
+        height: 10vh;
+
+        button {
+            display: inline-block;
+            border: none;
+            padding: 1rem 2rem;
+            margin: 10px;
+            text-decoration: none;
+            background-color: #0069ed;
+            color: #ffffff;
+            font-family: inherit;
+            font-size: 1rem;
+            line-height: 1;
+            cursor: pointer;
+            text-align: center;
+            transition: background 250ms ease-in-out, transform 150ms ease;
+            &:hover {
+                background-color: darken(#0069ed, 10%);
+            }
+        }
     }
 }

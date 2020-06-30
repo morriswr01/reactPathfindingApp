@@ -1,10 +1,20 @@
 @import "../../styles/variables";
 
-.boardItem {
+.item {
     width: 35px;
     height: 35px;
     background-color: $purpleRain;
     color: $freezePurple;
     margin: 5px;
     border-radius: 5px;
+
+    &Finish {
+        background-color: rgb(135, 199, 39);
+    }
+    &Start {
+        background-color: rgb(211, 35, 35);
+    }
+    &Visited {
+        background-color: rgb(90, 221, 204);
+    }
 }
