@@ -54,6 +54,7 @@ export default class Board extends React.Component {
                                     isStart,
                                     isFinish,
                                     isVisited,
+                                    isOnPath,
                                 } = item;
                                 return (
                                     <Item
@@ -63,6 +64,7 @@ export default class Board extends React.Component {
                                         isStart={isStart}
                                         isFinish={isFinish}
                                         isVisited={isVisited}
+                                        isOnPath={isOnPath}
                                     />
                                 );
                             })}

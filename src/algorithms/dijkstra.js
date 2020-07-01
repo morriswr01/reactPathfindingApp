@@ -8,15 +8,19 @@ export default function dijkstra(startNode, finishNode, grid) {
         const currentNode = unvisitedNodes.shift();
 
         // Check we are not trapped
-        if (currentNode.distance === Infinity) return;
+        if (currentNode.distance === Infinity) {
+            unvisitedNodes = [];
+            break;
+        }
 
         // Update state to show that current node has been visited
         currentNode.isVisited = true;
-        // visitedNodes.push(currentNode);
 
         // Check if we are at the finish
-        // if (currentNode === finishNode) return visitedNodes;
-        if (currentNode === finishNode) return;
+        if (currentNode === finishNode) {
+            unvisitedNodes = [];
+            break;
+        }
 
         // Find and update neighbours
         unvisitedNodes.map((node) => {
@@ -32,8 +36,15 @@ export default function dijkstra(startNode, finishNode, grid) {
             }
             return node;
         });
+    }
 
-        getOptimalPath(finishNode);
+    // Get optimal path
+    let onOptPathNode = finishNode;
+    while (onOptPathNode.previousNode !== null) {
+        onOptPathNode.previousNode.isOnPath = true;
+        console.log(onOptPathNode.previousNode);
+        
+        onOptPathNode = onOptPathNode.previousNode;
     }
 }
 
@@ -51,13 +62,4 @@ const getAllNodes = (grid) => {
     });
 
     return nodes;
-};
-
-const getOptimalPath = (finishNode) => {
-    const optimalPath = [];
-    console.log(optimalPath);
-    let currentNode = finishNode;
-    while (currentNode.previousNode) {
-        optimalPath.push(currentNode.previousNode);
-    }
 };
