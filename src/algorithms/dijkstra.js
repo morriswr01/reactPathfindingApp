@@ -1,24 +1,30 @@
 export default function dijkstra(startNode, finishNode, grid) {
-    // const visitedNodes = [];
+    const visitedNodes = [];
     let unvisitedNodes = getAllNodes(grid);
     startNode.distance = 0;
 
-    while (unvisitedNodes.length) {
+    let pathFound = false;
+
+    while (unvisitedNodes.length && !pathFound) {
         unvisitedNodes = sortNodesByDisatnce(unvisitedNodes);
         const currentNode = unvisitedNodes.shift();
 
+        if (currentNode.isWall) {
+            continue;
+        }
+
         // Check we are not trapped
         if (currentNode.distance === Infinity) {
-            unvisitedNodes = [];
             break;
         }
 
         // Update state to show that current node has been visited
-        currentNode.isVisited = true;
+        // currentNode.isVisited = true;
+        visitedNodes.push(currentNode);
 
         // Check if we are at the finish
         if (currentNode === finishNode) {
-            unvisitedNodes = [];
+            // pathFound = true;
             break;
         }
 
@@ -38,14 +44,10 @@ export default function dijkstra(startNode, finishNode, grid) {
         });
     }
 
-    // Get optimal path
-    let onOptPathNode = finishNode;
-    while (onOptPathNode.previousNode !== null) {
-        onOptPathNode.previousNode.isOnPath = true;
-        console.log(onOptPathNode.previousNode);
-        
-        onOptPathNode = onOptPathNode.previousNode;
-    }
+    // Get the optimal path from the completed djikstras pathfind
+    const shortestPath = getOptimalPath(finishNode);
+
+    return { visitedNodes, shortestPath };
 }
 
 const sortNodesByDisatnce = (unvisitedNodes) => {
@@ -62,4 +64,18 @@ const getAllNodes = (grid) => {
     });
 
     return nodes;
+};
+
+const getOptimalPath = (finishNode) => {
+    const optPath = [];
+
+    // Get optimal path
+    let onOptPathNode = finishNode;
+    while (onOptPathNode.previousNode !== null) {
+        // onOptPathNode.previousNode.isOnPath = true;
+        optPath.push(onOptPathNode);
+        onOptPathNode = onOptPathNode.previousNode;
+    }
+
+    return optPath;
 };

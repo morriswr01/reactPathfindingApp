@@ -7,6 +7,19 @@
     color: $freezePurple;
     margin: 5px;
     border-radius: 5px;
+    text-align: center;
+
+    p {
+        padding: 0;
+        margin: 0;
+        font-size: 0.5rem;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
 
     &Finish {
         background-color: rgb(135, 199, 39);
@@ -16,8 +29,13 @@
     }
     &Visited {
         background-color: rgb(90, 221, 204);
+        color: black;
     }
     &OnPath {
         background-color: rgb(231, 207, 71);
+        color: black;
+    }
+    &Wall {
+        background-color: rgb(0, 0, 0);
     }
 }
