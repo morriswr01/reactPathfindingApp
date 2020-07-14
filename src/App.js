@@ -1,4 +1,5 @@
 import React from "react";
+import { Provider } from "./Provider";
 
 // import Nav from "./components/Nav/Nav";
 import Board from "./components/Board/Board";
@@ -8,9 +9,11 @@ import "./App.scss";
 
 function App() {
     return (
-        <div className='App'>
-            <Board />
-        </div>
+        <Provider>
+            <div className='App'>
+                <Board />
+            </div>
+        </Provider>
     );
 }
 

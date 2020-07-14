@@ -1,4 +1,5 @@
 import React from "react";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfinity } from "@fortawesome/free-solid-svg-icons";
 
@@ -38,7 +39,13 @@ export default function Item(props) {
             onMouseEnter={() => onMouseEnter(rowID, colID)}
             onMouseUp={() => onMouseUp()}
         >
-            <p className='distance'>{isVisited ? distance : <FontAwesomeIcon icon={faInfinity} size="sm"/>}</p>
+            <p className='distance'>
+                {isVisited ? (
+                    distance
+                ) : (
+                    <FontAwesomeIcon icon={faInfinity} size='sm' />
+                )}
+            </p>
         </div>
     );
 }
