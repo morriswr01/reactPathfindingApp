@@ -1,14 +1,17 @@
-import React, { Component, useState, useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 import { Context } from "../../Provider";
 
 import Item from "../Item/Item";
 
 // Algorithms
 import dijkstra from "../../algorithms/dijkstra";
+import { DIJKSTRA } from "../../constants";
+import { Pathfinder } from "../../algorithms/Timer";
 
 // CSS
 import "./Board.scss";
-import { DIJKSTRA } from "../../constants";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPause, faPlay } from "@fortawesome/free-solid-svg-icons";
 
 export default function Board() {
     // Pull global context
@@ -22,15 +25,19 @@ export default function Board() {
         grid,
 
         // Board Update Methods
+        updateSpeed,
         updateItem,
         resetGrid,
         resetWalls,
     } = context;
+    const pathfinder = useRef(null);
 
+    const [isPaused, setIsPaused] = useState(false);
     const [mouseDown, setMouseDown] = useState(false);
 
+
     const handleMouseDown = (rowID, colID) => {
-        const newProperty = { isWall: true };
+        const newProperty = { isWall: !grid[rowID][colID].isWall };
         updateItem(rowID, colID, newProperty);
         setMouseDown(true);
     };
@@ -44,6 +51,22 @@ export default function Board() {
 
     const handleMouseUp = () => {
         setMouseDown(false);
+    };
+
+    const start = () => {
+        if (isPaused) {
+            console.log("Animation resumed...");
+            pathfinder.current.resumeTimers();
+        } else {
+            runPathfindingAlgorithm(algorithm);
+        }
+        setIsPaused(false);
+    };
+
+    const pause = () => {
+        pathfinder.current.pauseTimers();
+        console.log("Animation paused...");
+        setIsPaused(true);
     };
 
     const runPathfindingAlgorithm = (algorithm) => {
@@ -75,18 +98,38 @@ export default function Board() {
         animatePathfinding(visitedNodes, shortestPath.reverse());
     };
 
-    const animatePathfinding = async (visitedNodes, shortestPath) => {
-        for (let i = 0; i < visitedNodes.length; i++) {
-            const { rowID, colID } = visitedNodes[i];
+    // Refactor while loop
+    const animatePathfinding = (visitedNodes, shortestPath) => {
+        pathfinder.current = new Pathfinder();
+
+        let timerFactor = 1;
+
+        while (visitedNodes.length) {
+            const { rowID, colID } = visitedNodes.shift();
             let updatedProperty = { isVisited: true };
-            updateItem(rowID, colID, updatedProperty);
-            await sleep(timerInterval);
+
+            pathfinder.current.addTimer({
+                callback: () => {
+                    updateItem(rowID, colID, updatedProperty);
+                },
+                delay: timerInterval * timerFactor,
+            });
+
+            timerFactor += 1;
         }
-        for (let i = 0; i < shortestPath.length; i++) {
-            const { rowID, colID } = shortestPath[i];
+
+        while (shortestPath.length) {
+            const { rowID, colID } = shortestPath.shift();
             let updatedProperty = { isOnPath: true };
-            updateItem(rowID, colID, updatedProperty);
-            await sleep(timerInterval);
+
+            pathfinder.current.addTimer({
+                callback: () => {
+                    updateItem(rowID, colID, updatedProperty);
+                },
+                delay: timerInterval * timerFactor,
+            });
+
+            timerFactor += 1;
         }
     };
 
@@ -131,11 +174,11 @@ export default function Board() {
             </div>
 
             <footer className='footer'>
-                <button
-                    className='startBtn'
-                    onClick={() => runPathfindingAlgorithm(algorithm)}
-                >
-                    Go!
+                <button className='startBtn' onClick={() => start()}>
+                    <FontAwesomeIcon icon={faPlay} size='sm' />
+                </button>
+                <button className='pauseBtn' onClick={() => pause()}>
+                    <FontAwesomeIcon icon={faPause} size='sm' />
                 </button>
                 <button className='resetBtn' onClick={() => resetGrid()}>
                     Reset Path
@@ -143,11 +186,20 @@ export default function Board() {
                 <button className='resetBtn' onClick={() => resetWalls()}>
                     Reset Walls
                 </button>
+                <div className='speedSlider'>
+                    <label htmlFor='speed'>Animation Speed</label>
+                    <input
+                        type='range'
+                        min='50'
+                        max='500'
+                        step='50'
+                        id='speed'
+                        onChange={(e) => {
+                            updateSpeed(e.target.value);
+                        }}
+                    ></input>
+                </div>
             </footer>
         </div>
     );
 }
-
-const sleep = (milliseconds) => {
-    return new Promise((resolve) => setTimeout(resolve, milliseconds));
-};

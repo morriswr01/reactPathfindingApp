@@ -23,19 +23,42 @@
         button {
             display: inline-block;
             border: none;
+            border-radius: 5px;
             padding: 1rem 2rem;
             margin: 10px;
-            text-decoration: none;
             background-color: #0069ed;
-            color: #ffffff;
+            color: #fff;
             font-family: inherit;
             font-size: 1rem;
             line-height: 1;
             cursor: pointer;
             text-align: center;
             transition: background 250ms ease-in-out, transform 150ms ease;
+            
+            &.pauseBtn {
+                background-color: rgb(231, 207, 71);
+                border-style: solid;
+                &:hover {
+                    background-color: darken(rgb(231, 207, 71), 10%);
+                }
+            }
+            &.startBtn {
+                background-color: rgb(135, 199, 39);
+                border-style: solid;
+                &:hover {
+                    background-color: darken(rgb(135, 199, 39), 10%);
+                }
+            }
+
             &:hover {
                 background-color: darken(#0069ed, 10%);
+            }
+        }
+
+        .speedSlider {
+            display: inline-block;
+            .input {
+                height: 100%;
             }
         }
     }

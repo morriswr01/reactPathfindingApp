@@ -11,7 +11,7 @@ class Provider extends Component {
         super();
         this.state = {
             algorithm: DIJKSTRA,
-            timerInterval: 30,
+            timerInterval: 75,
             startNode: {
                 START_NODE_ROW: 10,
                 START_NODE_COL: 5,
@@ -29,6 +29,10 @@ class Provider extends Component {
         let grid = this.state.grid;
         grid[rowID][colID] = { ...grid[rowID][colID], ...newProperty };
         this.setState({ ...this.state, grid });
+    };
+
+    updateSpeed = (newInterval) => {
+        this.setState({ ...this.state, timerInterval: newInterval });
     };
 
     // Reset walls only, not the entire grid
@@ -113,6 +117,7 @@ class Provider extends Component {
                     // Functions
                     setWall: this.setWall,
                     resetWalls: this.resetWalls,
+                    updateSpeed: this.updateSpeed,
                     resetGrid: this.resetGrid,
                     updateItem: this.updateItem,
                 }}
