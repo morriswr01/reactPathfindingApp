@@ -1,3 +1,11 @@
+@mixin borderButton($color) {
+    background-color: $color;
+    border-style: solid;
+    &:hover {
+        background-color: darken($color, 10%);
+    }
+}
+
 .board {
     text-align: center;
     .header {
@@ -35,30 +43,18 @@
             text-align: center;
             transition: background 250ms ease-in-out, transform 150ms ease;
 
-            &.pauseBtn {
-                background-color: rgb(238, 206, 24);
-                border-style: solid;
-                &:hover {
-                    background-color: darken(rgb(238, 206, 24), 10%);
-                }
-            }
-            &.startBtn {
-                background-color: rgb(135, 199, 39);
-                border-style: solid;
-                &:hover {
-                    background-color: darken(rgb(135, 199, 39), 10%);
-                }
-            }
-            &.resetBtn {
-                background-color: rgba(255, 60, 0, 0.808);
-                border-style: solid;
-                &:hover {
-                    background-color: darken(rgba(255, 60, 0, 0.808), 10%);
-                }
-            }
-
             &:hover {
                 background-color: darken(#0069ed, 10%);
+            }
+
+            &.pauseBtn {
+                @include borderButton(rgb(238, 206, 24));
+            }
+            &.startBtn {
+                @include borderButton(rgb(135, 199, 39));
+            }
+            &.resetBtn {
+                @include borderButton(rgba(255, 60, 0, 0.808));
             }
         }
 
