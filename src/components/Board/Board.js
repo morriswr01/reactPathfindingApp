@@ -33,8 +33,9 @@ export default function Board() {
     const pathfinder = useRef(null);
 
     const [isPaused, setIsPaused] = useState(false);
-    const [mouseDown, setMouseDown] = useState(false);
+    const [isRunning, setIsRunning] = useState(false);
 
+    const [mouseDown, setMouseDown] = useState(false);
 
     const handleMouseDown = (rowID, colID) => {
         const newProperty = { isWall: !grid[rowID][colID].isWall };
@@ -58,8 +59,10 @@ export default function Board() {
             console.log("Animation resumed...");
             pathfinder.current.resumeTimers();
         } else {
+            pathfinder.current = new Pathfinder();
             runPathfindingAlgorithm(algorithm);
         }
+        setIsRunning(true);
         setIsPaused(false);
     };
 
@@ -67,6 +70,14 @@ export default function Board() {
         pathfinder.current.pauseTimers();
         console.log("Animation paused...");
         setIsPaused(true);
+    };
+
+    const reset = () => {
+        pathfinder.current.deleteTimers();
+        console.log("Animation reset...");
+        setIsPaused(false);
+        setIsRunning(false);
+        resetGrid();
     };
 
     const runPathfindingAlgorithm = (algorithm) => {
@@ -100,8 +111,6 @@ export default function Board() {
 
     // Refactor while loop
     const animatePathfinding = (visitedNodes, shortestPath) => {
-        pathfinder.current = new Pathfinder();
-
         let timerFactor = 1;
 
         while (visitedNodes.length) {
@@ -131,6 +140,8 @@ export default function Board() {
 
             timerFactor += 1;
         }
+
+        setIsRunning(false);
     };
 
     return (
@@ -180,10 +191,17 @@ export default function Board() {
                 <button className='pauseBtn' onClick={() => pause()}>
                     <FontAwesomeIcon icon={faPause} size='sm' />
                 </button>
-                <button className='resetBtn' onClick={() => resetGrid()}>
+                <button className='resetBtn' onClick={() => reset()}>
                     Reset Path
                 </button>
-                <button className='resetBtn' onClick={() => resetWalls()}>
+                <button
+                    className='resetBtn'
+                    onClick={() => {
+                        if (!isRunning) {
+                            resetWalls();
+                        }
+                    }}
+                >
                     Reset Walls
                 </button>
                 <div className='speedSlider'>
