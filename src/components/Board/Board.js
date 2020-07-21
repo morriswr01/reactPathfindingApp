@@ -11,7 +11,7 @@ import { Pathfinder } from "../../algorithms/Timer";
 // CSS
 import "./Board.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPause, faPlay } from "@fortawesome/free-solid-svg-icons";
+import { faPause, faPlay, faUndoAlt } from "@fortawesome/free-solid-svg-icons";
 
 export default function Board() {
     // Pull global context
@@ -192,10 +192,10 @@ export default function Board() {
                     <FontAwesomeIcon icon={faPause} size='sm' />
                 </button>
                 <button className='resetBtn' onClick={() => reset()}>
-                    Reset Path
+                    <FontAwesomeIcon icon={faUndoAlt} size='sm' />
                 </button>
                 <button
-                    className='resetBtn'
+                    className='resetWalls'
                     onClick={() => {
                         if (!isRunning) {
                             resetWalls();

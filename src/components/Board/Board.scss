@@ -34,12 +34,12 @@
             cursor: pointer;
             text-align: center;
             transition: background 250ms ease-in-out, transform 150ms ease;
-            
+
             &.pauseBtn {
-                background-color: rgb(231, 207, 71);
+                background-color: rgb(238, 206, 24);
                 border-style: solid;
                 &:hover {
-                    background-color: darken(rgb(231, 207, 71), 10%);
+                    background-color: darken(rgb(238, 206, 24), 10%);
                 }
             }
             &.startBtn {
@@ -47,6 +47,13 @@
                 border-style: solid;
                 &:hover {
                     background-color: darken(rgb(135, 199, 39), 10%);
+                }
+            }
+            &.resetBtn {
+                background-color: rgba(255, 60, 0, 0.808);
+                border-style: solid;
+                &:hover {
+                    background-color: darken(rgba(255, 60, 0, 0.808), 10%);
                 }
             }
 
