@@ -16,6 +16,7 @@ export default function Item(props) {
         colID,
         onMouseDown,
         onMouseEnter,
+        onMouseLeave,
         onMouseUp,
         distance,
     } = props;
@@ -34,18 +35,21 @@ export default function Item(props) {
 
     return (
         <div
-            className={`item ${itemType}`}
+            className='gridSquare'
             onMouseDown={() => onMouseDown(rowID, colID)}
             onMouseEnter={() => onMouseEnter(rowID, colID)}
-            onMouseUp={() => onMouseUp()}
+            onMouseLeave={() => onMouseLeave(rowID, colID)}
+            onMouseUp={() => onMouseUp(rowID, colID)}
         >
-            <p className='distance'>
-                {isVisited ? (
-                    distance
-                ) : (
-                    <FontAwesomeIcon icon={faInfinity} size='sm' />
-                )}
-            </p>
+            <div className={`item ${itemType}`}>
+                <p className='distance'>
+                    {isVisited ? (
+                        distance
+                    ) : (
+                        <FontAwesomeIcon icon={faInfinity} size='sm' />
+                    )}
+                </p>
+            </div>
         </div>
     );
 }

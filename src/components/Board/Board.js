@@ -29,6 +29,8 @@ export default function Board() {
         updateItem,
         resetGrid,
         resetWalls,
+        updateStart,
+        updateFinish,
     } = context;
     const pathfinder = useRef(null);
 
@@ -36,21 +38,53 @@ export default function Board() {
     const [isRunning, setIsRunning] = useState(false);
 
     const [mouseDown, setMouseDown] = useState(false);
+    const [movingStart, setMovingStart] = useState(false);
+    const [movingFinish, setMovingFinish] = useState(false);
 
     const handleMouseDown = (rowID, colID) => {
-        const newProperty = { isWall: !grid[rowID][colID].isWall };
-        updateItem(rowID, colID, newProperty);
+        if (grid[rowID][colID].isStart) {
+            setMovingStart(true);
+        } else if (grid[rowID][colID].isFinish) {
+            setMovingFinish(true);
+        } else {
+            const newProperty = { isWall: !grid[rowID][colID].isWall };
+            updateItem(rowID, colID, newProperty);
+        }
         setMouseDown(true);
     };
 
     const handleMouseEnter = (rowID, colID) => {
-        if (mouseDown) {
+        if (movingStart) {
+            const newProperty = { isStart: true };
+            updateItem(rowID, colID, newProperty);
+        } else if (movingFinish) {
+            const newProperty = { isFinish: true };
+            updateItem(rowID, colID, newProperty);
+        } else if (mouseDown) {
             const newProperty = { isWall: true };
             updateItem(rowID, colID, newProperty);
         }
     };
 
-    const handleMouseUp = () => {
+    const handleMouseLeave = (rowID, colID) => {
+        if (movingStart) {
+            const newProperty = { isStart: false };
+            updateItem(rowID, colID, newProperty);
+        } else if (movingFinish) {
+            const newProperty = { isFinish: false };
+            updateItem(rowID, colID, newProperty);
+        }
+    };
+
+    const handleMouseUp = (rowID, colID) => {
+        if (movingStart) {
+            updateStart(rowID, colID);
+            setMovingStart(false);
+        }
+        if (movingFinish) {
+            updateFinish(rowID, colID);
+            setMovingFinish(false);
+        }
         setMouseDown(false);
     };
 
@@ -176,6 +210,7 @@ export default function Board() {
                                     distance={distance}
                                     onMouseDown={handleMouseDown}
                                     onMouseEnter={handleMouseEnter}
+                                    onMouseLeave={handleMouseLeave}
                                     onMouseUp={handleMouseUp}
                                 />
                             );

@@ -35,6 +35,27 @@ class Provider extends Component {
         this.setState({ ...this.state, timerInterval: newInterval });
     };
 
+    updateStart = (rowID, colID) => {
+        this.setState({
+            ...this.state,
+            isWall: false,
+            startNode: {
+                START_NODE_ROW: rowID,
+                START_NODE_COL: colID,
+            },
+        });
+    };
+    updateFinish = (rowID, colID) => {
+        this.setState({
+            ...this.state,
+            isWall: false,
+            finishNode: {
+                FINISH_NODE_ROW: rowID,
+                FINISH_NODE_COL: colID,
+            },
+        });
+    };
+
     // Reset walls only, not the entire grid
     resetWalls = () => {
         let newGrid = this.state.grid;
@@ -115,11 +136,12 @@ class Provider extends Component {
                     grid: this.state.grid,
 
                     // Functions
-                    setWall: this.setWall,
                     resetWalls: this.resetWalls,
                     updateSpeed: this.updateSpeed,
                     resetGrid: this.resetGrid,
                     updateItem: this.updateItem,
+                    updateStart: this.updateStart,
+                    updateFinish: this.updateFinish,
                 }}
             >
                 {this.props.children}
