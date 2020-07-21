@@ -11,7 +11,7 @@ class Provider extends Component {
         super();
         this.state = {
             algorithm: DIJKSTRA,
-            timerInterval: 75,
+            timerInterval: 450,
             startNode: {
                 START_NODE_ROW: 10,
                 START_NODE_COL: 5,

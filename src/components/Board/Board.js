@@ -89,15 +89,17 @@ export default function Board() {
     };
 
     const start = () => {
-        if (isPaused) {
-            console.log("Animation resumed...");
-            pathfinder.current.resumeTimers();
-        } else {
-            pathfinder.current = new Pathfinder();
-            runPathfindingAlgorithm(algorithm);
+        if (!isRunning) {
+            if (isPaused) {
+                console.log("Animation resumed...");
+                pathfinder.current.resumeTimers();
+            } else {
+                pathfinder.current = new Pathfinder();
+                runPathfindingAlgorithm(algorithm);
+            }
+            setIsRunning(true);
+            setIsPaused(false);
         }
-        setIsRunning(true);
-        setIsPaused(false);
     };
 
     const pause = () => {
@@ -170,6 +172,7 @@ export default function Board() {
                     updateItem(rowID, colID, updatedProperty);
                 },
                 delay: timerInterval * timerFactor,
+                timerFactor: timerFactor,
             });
 
             timerFactor += 1;
@@ -244,11 +247,12 @@ export default function Board() {
                     <input
                         type='range'
                         min='50'
-                        max='500'
-                        step='50'
+                        max='450'
+                        step='100'
                         id='speed'
                         onChange={(e) => {
-                            updateSpeed(e.target.value);
+                            updateSpeed(500 - e.target.value);
+                            pathfinder.current.updateTimers(timerInterval);
                         }}
                     ></input>
                 </div>
