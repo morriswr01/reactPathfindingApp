@@ -5,7 +5,7 @@ export default function dijkstra(startNode, finishNode, grid) {
 
     let pathFound = false;
 
-    while (unvisitedNodes.length && !pathFound) {
+    while (unvisitedNodes.length) {
         unvisitedNodes = sortNodesByDisatnce(unvisitedNodes);
         const currentNode = unvisitedNodes.shift();
 

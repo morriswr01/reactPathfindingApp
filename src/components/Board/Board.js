@@ -5,7 +5,8 @@ import Item from "../Item/Item";
 
 // Algorithms
 import dijkstra from "../../algorithms/dijkstra";
-import { DIJKSTRA } from "../../constants";
+import aStar from "../../algorithms/aStar";
+import { DIJKSTRA, ASTAR } from "../../constants";
 import { Pathfinder } from "../../algorithms/Timer";
 
 // CSS
@@ -121,12 +122,33 @@ export default function Board() {
             case DIJKSTRA:
                 runDijkstras();
                 break;
+            case ASTAR:
+                runAStar();
+                break;
             default:
                 console.log(
                     "You asked us to run an algorithm but there was an issue! :("
                 );
                 break;
         }
+    };
+
+    const runAStar = () => {
+        let { grid, startNode, finishNode } = context;
+        const startItem =
+            grid[startNode.START_NODE_ROW][startNode.START_NODE_COL];
+        const finishItem =
+            grid[finishNode.FINISH_NODE_ROW][finishNode.FINISH_NODE_COL];
+
+        const { visitedNodes, shortestPath } = aStar(
+            startItem,
+            finishItem,
+            grid
+        );
+
+        // console.log(visitedNodes);
+
+        animatePathfinding(visitedNodes, shortestPath.reverse());
     };
 
     const runDijkstras = () => {
@@ -182,81 +204,87 @@ export default function Board() {
     };
 
     return (
-        <div className='board'>
-            <header className='header'>
-                <h1>Pathfinding With react</h1>
-            </header>
-            <div className='grid'>
-                {grid.map((gridRow) => (
-                    <div className='gridRow'>
-                        {gridRow.map((item) => {
-                            const {
-                                rowID,
-                                colID,
-                                isStart,
-                                isFinish,
-                                isVisited,
-                                isOnPath,
-                                isWall,
-                                distance,
-                            } = item;
-                            return (
-                                <Item
-                                    key={colID}
-                                    colID={colID}
-                                    rowID={rowID}
-                                    isStart={isStart}
-                                    isFinish={isFinish}
-                                    isVisited={isVisited}
-                                    isOnPath={isOnPath}
-                                    isWall={isWall}
-                                    distance={distance}
-                                    onMouseDown={handleMouseDown}
-                                    onMouseEnter={handleMouseEnter}
-                                    onMouseLeave={handleMouseLeave}
-                                    onMouseUp={handleMouseUp}
-                                />
-                            );
-                        })}
+        <div>
+            <div className='board'>
+                <header className='header'>
+                    <div className='title'>
+                        <h1>Pathfinding With react</h1>
                     </div>
-                ))}
-            </div>
-
-            <footer className='footer'>
-                <button className='startBtn' onClick={() => start()}>
-                    <FontAwesomeIcon icon={faPlay} size='sm' />
-                </button>
-                <button className='pauseBtn' onClick={() => pause()}>
-                    <FontAwesomeIcon icon={faPause} size='sm' />
-                </button>
-                <button className='resetBtn' onClick={() => reset()}>
-                    <FontAwesomeIcon icon={faUndoAlt} size='sm' />
-                </button>
-                <button
-                    className='resetWalls'
-                    onClick={() => {
-                        if (!isRunning) {
-                            resetWalls();
-                        }
-                    }}
-                >
-                    Reset Walls
-                </button>
-                <div className='speedSlider'>
-                    <label htmlFor='speed'>Animation Speed</label>
-                    <input
-                        type='range'
-                        min='50'
-                        max='450'
-                        step='100'
-                        id='speed'
-                        onChange={(e) => {
-                            updateSpeed(500 - e.target.value);
-                            pathfinder.current.updateTimers(timerInterval);
-                        }}
-                    ></input>
+                    <div className='controls'>
+                        <button className='startBtn' onClick={() => start()}>
+                            <FontAwesomeIcon icon={faPlay} size='sm' />
+                        </button>
+                        <button className='pauseBtn' onClick={() => pause()}>
+                            <FontAwesomeIcon icon={faPause} size='sm' />
+                        </button>
+                        <button className='resetBtn' onClick={() => reset()}>
+                            <FontAwesomeIcon icon={faUndoAlt} size='sm' />
+                        </button>
+                        <button
+                            className='resetWalls'
+                            onClick={() => {
+                                if (!isRunning) {
+                                    resetWalls();
+                                }
+                            }}
+                        >
+                            Reset Walls
+                        </button>
+                        <div className='speedSlider'>
+                            <label htmlFor='speed'>Animation Speed</label>
+                            <input
+                                type='range'
+                                min='50'
+                                max='450'
+                                step='100'
+                                id='speed'
+                                onChange={(e) => {
+                                    updateSpeed(500 - e.target.value);
+                                }}
+                            ></input>
+                        </div>
+                    </div>
+                </header>
+                <div className='gridContainer'>
+                    <div className='grid'>
+                        {grid.map((gridRow) => (
+                            <div className='gridRow'>
+                                {gridRow.map((item) => {
+                                    const {
+                                        rowID,
+                                        colID,
+                                        isStart,
+                                        isFinish,
+                                        isVisited,
+                                        isOnPath,
+                                        isWall,
+                                        distance,
+                                        f,
+                                    } = item;
+                                    return (
+                                        <Item
+                                            key={colID}
+                                            colID={colID}
+                                            rowID={rowID}
+                                            isStart={isStart}
+                                            isFinish={isFinish}
+                                            isVisited={isVisited}
+                                            isOnPath={isOnPath}
+                                            isWall={isWall}
+                                            f={f}
+                                            distance={distance}
+                                            onMouseDown={handleMouseDown}
+                                            onMouseEnter={handleMouseEnter}
+                                            onMouseLeave={handleMouseLeave}
+                                            onMouseUp={handleMouseUp}
+                                        />
+                                    );
+                                })}
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            </footer>
+            </div>
         </div>
     );
 }

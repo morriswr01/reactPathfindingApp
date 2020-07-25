@@ -19,6 +19,7 @@ export default function Item(props) {
         onMouseLeave,
         onMouseUp,
         distance,
+        f,
     } = props;
 
     const itemType = isFinish
@@ -44,7 +45,8 @@ export default function Item(props) {
             <div className={`item ${itemType}`}>
                 <p className='distance'>
                     {isVisited ? (
-                        distance
+                        // distance
+                        f
                     ) : (
                         <FontAwesomeIcon icon={faInfinity} size='sm' />
                     )}

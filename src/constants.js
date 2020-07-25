@@ -4,6 +4,7 @@ export const FINISH_NODE_ROW = 10;
 export const FINISH_NODE_COL = 15;
 
 export const DIJKSTRA = "DIJKSTRA";
+export const ASTAR = "ASTAR";
 
 const gridRows = 21;
 const gridCols = 21;
@@ -15,12 +16,18 @@ for (let rowID = 0; rowID < gridRows; rowID++) {
         grid[rowID][colID] = {
             colID: colID,
             rowID: rowID,
-            isStart: rowID === START_NODE_ROW && colID === START_NODE_COL,
-            isFinish: rowID === FINISH_NODE_ROW && colID === FINISH_NODE_COL,
+            isStart:
+                rowID === START_NODE_ROW &&
+                colID === START_NODE_COL,
+            isFinish:
+                rowID === FINISH_NODE_ROW &&
+                colID === FINISH_NODE_COL,
             isWall: false,
             isVisited: false,
             isOnPath: false,
             distance: Infinity,
+            h: Infinity,
+            f: Infinity,
             previousNode: null,
         };
     }

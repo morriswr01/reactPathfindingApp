@@ -1,6 +1,6 @@
 import React, { Component, createContext } from "react";
 
-import { grid, DIJKSTRA } from "./constants";
+import { grid, DIJKSTRA, ASTAR } from "./constants";
 
 // Blank context
 const Context = createContext();
@@ -10,7 +10,7 @@ class Provider extends Component {
     constructor() {
         super();
         this.state = {
-            algorithm: DIJKSTRA,
+            algorithm: ASTAR,
             timerInterval: 450,
             startNode: {
                 START_NODE_ROW: 10,
@@ -79,6 +79,8 @@ class Provider extends Component {
             const resetGridWithOldWalls = oldGrid.map((row) =>
                 row.map((node) => ({
                     ...node,
+                    h: Infinity,
+                    f: Infinity,
                     isVisited: false,
                     isOnPath: false,
                     distance: Infinity,
@@ -117,6 +119,10 @@ class Provider extends Component {
                     isVisited: false,
                     isOnPath: false,
                     distance: Infinity,
+                    // Factor these bad bois out
+                    h: Infinity,
+                    f: Infinity,
+                    closed: false,
                     previousNode: null,
                 });
             }

@@ -1,3 +1,5 @@
+@import "../../styles/variables";
+
 @mixin borderButton($color) {
     background-color: $color;
     border-style: solid;
@@ -8,61 +10,81 @@
 
 .board {
     text-align: center;
+    height: 100%;
     .header {
-        height: 10vh;
-    }
-
-    .grid {
-        height: 80vh;
         display: flex;
         flex-direction: column;
+        justify-content: space-evenly;
+        height: 12vh;
+
+        // Styles
+        color: #fff;
+        background-color: $heavyPurple;
+
+        .controls {
+            button {
+                display: inline-block;
+                border: none;
+                border-radius: 5px;
+                padding: 1rem 2rem;
+                margin: 10px;
+                background-color: #0069ed;
+                color: #fff;
+                font-family: inherit;
+                font-size: 1rem;
+                line-height: 1;
+                cursor: pointer;
+                text-align: center;
+                transition: background 250ms ease-in-out, transform 150ms ease;
+
+                &:hover {
+                    background-color: darken(#0069ed, 10%);
+                }
+
+                &.pauseBtn {
+                    @include borderButton(rgb(238, 206, 24));
+                }
+                &.startBtn {
+                    @include borderButton(rgb(135, 199, 39));
+                }
+                &.resetBtn {
+                    @include borderButton(rgba(255, 60, 0, 0.808));
+                }
+            }
+
+            .speedSlider {
+                display: inline-block;
+                .input {
+                    height: 100%;
+                }
+            }
+        }
+    }
+
+    .gridContainer {
+        display: flex;
         justify-content: center;
-        margin: auto;
+        align-items: center;
 
-        &Row {
+        height: 88vh;
+        .grid {
+            // height: 80vh;
+            // height: 100%;
             display: flex;
-            flex-direction: row;
-            justify-content: center;
-        }
-    }
-    .footer {
-        height: 10vh;
+            flex-direction: column;
+            // justify-content: center;
+            // align-items: center;
+            // margin: auto;
 
-        button {
-            display: inline-block;
-            border: none;
-            border-radius: 5px;
-            padding: 1rem 2rem;
-            margin: 10px;
-            background-color: #0069ed;
-            color: #fff;
-            font-family: inherit;
-            font-size: 1rem;
-            line-height: 1;
-            cursor: pointer;
-            text-align: center;
-            transition: background 250ms ease-in-out, transform 150ms ease;
-
-            &:hover {
-                background-color: darken(#0069ed, 10%);
-            }
-
-            &.pauseBtn {
-                @include borderButton(rgb(238, 206, 24));
-            }
-            &.startBtn {
-                @include borderButton(rgb(135, 199, 39));
-            }
-            &.resetBtn {
-                @include borderButton(rgba(255, 60, 0, 0.808));
-            }
-        }
-
-        .speedSlider {
-            display: inline-block;
-            .input {
-                height: 100%;
+            &Row {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
             }
         }
     }
+}
+
+body {
+    height: 100vh;;
 }
