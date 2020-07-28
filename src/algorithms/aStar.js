@@ -2,40 +2,52 @@
 const PriorityQueue = require("javascript-priority-queue");
 
 export default function aStar(startNode, finishNode, grid) {
-    let visitedNodes = [];
-    let unvisitedHeap = new PriorityQueue.default("min");
-    let unvisitedNodes = getAllNodes(grid);
-    // This is G(x)
-    startNode.distance = 0;
-    startNode.f = 0;
-    startNode.h = 0;
+    // Add A* specific properties to nodes
+    grid.map((row) =>
+        row.map((node) => ({
+            ...node,
+            isSeen: false,
+            h: Infinity,
+            f: Infinity,
+        }))
+    );
 
+    // Store order of visited nodes so that they can be animated
+    let visitedNodes = [];
+
+    // Store min heap ordered on the total cost of the heuistic + the distance from start
+    let unvisitedHeap = new PriorityQueue.default("min");
+
+    // Set G(x), H(x) and F(x) to 0 for the start node and add to Min Heap
+    startNode.distance = 0;
+    startNode.h = 0;
+    startNode.f = 0;
     unvisitedHeap.enqueue(startNode, startNode.f);
 
+    // While there are still valid nodes in the heap to consider
     while (unvisitedHeap.size() > 0) {
-        // Get lowest f'ed node and use it as currently considered node
+        // Get lowest F(x)'ed node and set as currently considered node
         let currentNode = unvisitedHeap.dequeue();
 
+        // Ignore walls
         if (currentNode.isWall) {
             continue;
         }
 
+        // Node is being visited so set it to isSeen
         currentNode.isSeen = true;
 
-        // Check if we are at the finish
+        // If at the finish, break
         if (currentNode === finishNode) {
-            // pathFound = true;
             break;
         }
-
-        currentNode.closed = true;
 
         // Find and update neighbours
         let neighbours = getNeighbours(grid, currentNode);
 
         // Find and update neighbours
         neighbours.forEach((neighbour) => {
-            if (!neighbours.closed && !neighbour.isWall) {
+            if (!neighbour.isWall) {
                 // New score using this path
                 let newDistance = currentNode.distance + 1;
                 // Have we found a shorter path to a neighbour?
@@ -55,7 +67,7 @@ export default function aStar(startNode, finishNode, grid) {
 
     // Get the optimal path from the completed djikstras pathfind
     const shortestPath = getOptimalPath(finishNode);
-    console.log(visitedNodes.toString());
+    console.log(visitedNodes);
     console.log(shortestPath);
 
     return {
@@ -88,7 +100,6 @@ const getOptimalPath = (finishNode) => {
     // Get optimal path
     let onOptPathNode = finishNode;
     while (onOptPathNode.previousNode !== null) {
-        // onOptPathNode.previousNode.isOnPath = true;
         optPath.push(onOptPathNode);
         onOptPathNode = onOptPathNode.previousNode;
     }

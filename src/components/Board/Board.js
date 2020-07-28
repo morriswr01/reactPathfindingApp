@@ -90,17 +90,15 @@ export default function Board() {
     };
 
     const start = () => {
-        if (!isRunning) {
-            if (isPaused) {
-                console.log("Animation resumed...");
-                pathfinder.current.resumeTimers();
-            } else {
-                pathfinder.current = new Pathfinder();
-                runPathfindingAlgorithm(algorithm);
-            }
-            setIsRunning(true);
-            setIsPaused(false);
+        if (isPaused && isRunning) {
+            console.log("Animation resumed...");
+            pathfinder.current.resumeTimers();
+        } else if (!isRunning) {
+            pathfinder.current = new Pathfinder();
+            runPathfindingAlgorithm(algorithm);
         }
+        setIsRunning(true);
+        setIsPaused(false);
     };
 
     const pause = () => {
@@ -110,11 +108,13 @@ export default function Board() {
     };
 
     const reset = () => {
-        pathfinder.current.deleteTimers();
-        console.log("Animation reset...");
-        setIsPaused(false);
-        setIsRunning(false);
-        resetGrid();
+        if (pathfinder.current) {
+            pathfinder.current.deleteTimers();
+            console.log("Animation reset...");
+            setIsPaused(false);
+            setIsRunning(false);
+            resetGrid();
+        }
     };
 
     const runPathfindingAlgorithm = (algorithm) => {
@@ -145,8 +145,6 @@ export default function Board() {
             finishItem,
             grid
         );
-
-        // console.log(visitedNodes);
 
         animatePathfinding(visitedNodes, shortestPath.reverse());
     };

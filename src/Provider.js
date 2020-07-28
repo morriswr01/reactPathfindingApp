@@ -119,10 +119,6 @@ class Provider extends Component {
                     isVisited: false,
                     isOnPath: false,
                     distance: Infinity,
-                    // Factor these bad bois out
-                    h: Infinity,
-                    f: Infinity,
-                    closed: false,
                     previousNode: null,
                 });
             }

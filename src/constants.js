@@ -26,8 +26,6 @@ for (let rowID = 0; rowID < gridRows; rowID++) {
             isVisited: false,
             isOnPath: false,
             distance: Infinity,
-            h: Infinity,
-            f: Infinity,
             previousNode: null,
         };
     }

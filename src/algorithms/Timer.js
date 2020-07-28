@@ -49,8 +49,10 @@ export class Pathfinder {
     }
 
     deleteTimers() {
-        this.timers.forEach((timer) => {
-            timer.destroy();
-        });
+        if (this.timers.length) {
+            this.timers.forEach((timer) => {
+                timer.destroy();
+            });
+        }
     }
 }

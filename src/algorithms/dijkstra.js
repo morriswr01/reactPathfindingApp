@@ -3,8 +3,6 @@ export default function dijkstra(startNode, finishNode, grid) {
     let unvisitedNodes = getAllNodes(grid);
     startNode.distance = 0;
 
-    let pathFound = false;
-
     while (unvisitedNodes.length) {
         unvisitedNodes = sortNodesByDisatnce(unvisitedNodes);
         const currentNode = unvisitedNodes.shift();
@@ -19,12 +17,10 @@ export default function dijkstra(startNode, finishNode, grid) {
         }
 
         // Update state to show that current node has been visited
-        // currentNode.isVisited = true;
         visitedNodes.push(currentNode);
 
         // Check if we are at the finish
         if (currentNode === finishNode) {
-            // pathFound = true;
             break;
         }
 
@@ -46,6 +42,8 @@ export default function dijkstra(startNode, finishNode, grid) {
 
     // Get the optimal path from the completed djikstras pathfind
     const shortestPath = getOptimalPath(finishNode);
+    console.log(visitedNodes);
+    console.log(shortestPath);
 
     return { visitedNodes, shortestPath };
 }
