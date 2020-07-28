@@ -56,6 +56,10 @@ class Provider extends Component {
         });
     };
 
+    updateSelectedAlgorithm = (algorithm) => {
+        this.setState({...this.state, algorithm});
+    };
+
     // Reset walls only, not the entire grid
     resetWalls = () => {
         let newGrid = this.state.grid;
@@ -144,6 +148,7 @@ class Provider extends Component {
                     updateItem: this.updateItem,
                     updateStart: this.updateStart,
                     updateFinish: this.updateFinish,
+                    updateSelectedAlgorithm: this.updateSelectedAlgorithm,
                 }}
             >
                 {this.props.children}

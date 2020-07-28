@@ -22,7 +22,8 @@
         background-color: $heavyPurple;
 
         .controls {
-            button {
+            button,
+            select {
                 display: inline-block;
                 border: none;
                 border-radius: 5px;
@@ -50,6 +51,10 @@
                 &.resetBtn {
                     @include borderButton(rgba(255, 60, 0, 0.808));
                 }
+            }
+
+            .algorithmSelection {
+                display: inline-block;
             }
 
             .speedSlider {
@@ -86,5 +91,5 @@
 }
 
 body {
-    height: 100vh;;
+    height: 100vh;
 }

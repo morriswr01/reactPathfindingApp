@@ -32,6 +32,7 @@ export default function Board() {
         resetWalls,
         updateStart,
         updateFinish,
+        updateSelectedAlgorithm,
     } = context;
     const pathfinder = useRef(null);
 
@@ -114,6 +115,12 @@ export default function Board() {
             setIsPaused(false);
             setIsRunning(false);
             resetGrid();
+        }
+    };
+
+    const setAlgorithm = (algorithm) => {
+        if (!isRunning) {
+            updateSelectedAlgorithm(algorithm);
         }
     };
 
@@ -209,6 +216,16 @@ export default function Board() {
                         <h1>Pathfinding With react</h1>
                     </div>
                     <div className='controls'>
+                        <div className='algorithmSelection'>
+                            <select
+                                className='algoSelectionDropdown'
+                                name='algorithmSelection'
+                                onChange={(e) => setAlgorithm(e.target.value)}
+                            >
+                                <option value={ASTAR}>A*</option>
+                                <option value={DIJKSTRA}>Dijkstras</option>
+                            </select>
+                        </div>
                         <button className='startBtn' onClick={() => start()}>
                             <FontAwesomeIcon icon={faPlay} size='sm' />
                         </button>
