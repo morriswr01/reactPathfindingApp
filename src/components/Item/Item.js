@@ -45,8 +45,11 @@ export default function Item(props) {
             <div className={`item ${itemType}`}>
                 <p className='distance'>
                     {isVisited ? (
-                        // distance
-                        f
+                        f !== Infinity ? (
+                            f
+                        ) : (
+                            distance
+                        )
                     ) : (
                         <FontAwesomeIcon icon={faInfinity} size='sm' />
                     )}
