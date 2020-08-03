@@ -28,8 +28,8 @@ export default function Item(props) {
         ? "itemStart"
         : isOnPath
         ? "itemOnPath"
-        // : isVisited
-        // ? "itemVisited"
+        : isVisited
+        ? "itemVisited"
         // : isWall
         // ? "itemWall"
         : "";

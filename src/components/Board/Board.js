@@ -26,6 +26,8 @@ export default function Board() {
         grid,
 
         // Board Update Methods
+        addWalls,
+        newWall,
         updateSpeed,
         updateItem,
         resetGrid,
@@ -50,6 +52,10 @@ export default function Board() {
             setMovingFinish(true);
         } else {
             const newProperty = { isWall: !grid[rowID][colID].isWall };
+            const newClass = !grid[rowID][colID].isWall
+                ? "item itemWall"
+                : "item";
+            document.getElementById(`${colID}, ${rowID}`).className = newClass;
             updateItem(rowID, colID, newProperty);
         }
         setMouseDown(true);
@@ -63,8 +69,12 @@ export default function Board() {
             const newProperty = { isFinish: true };
             updateItem(rowID, colID, newProperty);
         } else if (mouseDown) {
-            const newProperty = { isWall: true };
-            updateItem(rowID, colID, newProperty);
+            if (!grid[rowID][colID].isFinish && !grid[rowID][colID].isStart) {
+                document.getElementById(
+                    `${colID}, ${rowID}`
+                ).className = "item itemWall";
+                newWall(grid[rowID][colID]);
+            }
         }
     };
 
@@ -82,10 +92,11 @@ export default function Board() {
         if (movingStart) {
             updateStart(rowID, colID);
             setMovingStart(false);
-        }
-        if (movingFinish) {
+        } else if (movingFinish) {
             updateFinish(rowID, colID);
             setMovingFinish(false);
+        } else {
+            addWalls();
         }
         setMouseDown(false);
     };

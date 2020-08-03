@@ -1,6 +1,6 @@
 import React, { Component, createContext } from "react";
 
-import { grid, DIJKSTRA, ASTAR } from "./constants";
+import { grid, ASTAR } from "./constants";
 
 // Blank context
 const Context = createContext();
@@ -9,6 +9,7 @@ const Context = createContext();
 class Provider extends Component {
     constructor() {
         super();
+        this.newWalls = [];
         this.state = {
             algorithm: ASTAR,
             timerInterval: 450,
@@ -57,7 +58,22 @@ class Provider extends Component {
     };
 
     updateSelectedAlgorithm = (algorithm) => {
-        this.setState({...this.state, algorithm});
+        this.setState({ ...this.state, algorithm });
+    };
+
+    // Take an array of new walls and add them to the grid in a single this.setState
+    addWalls = () => {
+        let newGrid = this.state.grid;
+        this.newWalls.forEach(({ rowID, colID }) => {
+            newGrid[rowID][colID].isWall = true;
+        });
+
+        this.setState({ ...this.state, grid: newGrid });
+        this.newWalls = [];
+    };
+
+    newWall = (newWall) => {
+        this.newWalls.push(newWall);
     };
 
     // Reset walls only, not the entire grid
@@ -66,10 +82,17 @@ class Provider extends Component {
 
         // Remove walls from new grid
         newGrid = newGrid.map((row) =>
-            row.map((node) => ({
-                ...node,
-                isWall: false,
-            }))
+            row.map((node) => {
+                if (node.isWall) {
+                    document.getElementById(
+                        `${node.colID}, ${node.rowID}`
+                    ).className = "item";
+                }
+                return {
+                    ...node,
+                    isWall: false,
+                };
+            })
         );
         this.setState({ ...this.state, grid: newGrid });
     };
@@ -142,6 +165,8 @@ class Provider extends Component {
                     grid: this.state.grid,
 
                     // Functions
+                    newWall: this.newWall,
+                    addWalls: this.addWalls,
                     resetWalls: this.resetWalls,
                     updateSpeed: this.updateSpeed,
                     resetGrid: this.resetGrid,
