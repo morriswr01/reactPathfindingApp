@@ -28,10 +28,10 @@ export default function Item(props) {
         ? "itemStart"
         : isOnPath
         ? "itemOnPath"
-        : isVisited
-        ? "itemVisited"
-        : isWall
-        ? "itemWall"
+        // : isVisited
+        // ? "itemVisited"
+        // : isWall
+        // ? "itemWall"
         : "";
 
     return (
@@ -42,7 +42,7 @@ export default function Item(props) {
             onMouseLeave={() => onMouseLeave(rowID, colID)}
             onMouseUp={() => onMouseUp(rowID, colID)}
         >
-            <div className={`item ${itemType}`}>
+            <div className={`item ${itemType}`} id={`${colID}, ${rowID}`}>
                 <p className='distance'>
                     {isVisited ? (
                         f !== Infinity ? (
