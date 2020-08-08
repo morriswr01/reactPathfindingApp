@@ -5,9 +5,9 @@ import Item from "../Item/Item";
 
 // Algorithms
 import dijkstra from "../../algorithms/dijkstra";
-import aStar from "../../algorithms/aStar";
+import aStar from "../../algorithms/aStar.ts";
 import { DIJKSTRA, ASTAR } from "../../constants";
-import { Pathfinder } from "../../algorithms/Timer";
+import { Pathfinder } from "../../algorithms/Pathfinder";
 
 // CSS
 import "./Board.scss";
@@ -70,9 +70,8 @@ export default function Board() {
             updateItem(rowID, colID, newProperty);
         } else if (mouseDown) {
             if (!grid[rowID][colID].isFinish && !grid[rowID][colID].isStart) {
-                document.getElementById(
-                    `${colID}, ${rowID}`
-                ).className = "item itemWall";
+                document.getElementById(`${colID}, ${rowID}`).className =
+                    "item itemWall";
                 newWall(grid[rowID][colID]);
             }
         }
@@ -158,11 +157,16 @@ export default function Board() {
         const finishItem =
             grid[finishNode.FINISH_NODE_ROW][finishNode.FINISH_NODE_COL];
 
-        const { visitedNodes, shortestPath } = aStar(
-            startItem,
-            finishItem,
-            grid
-        );
+        // const { visitedNodes, shortestPath } = aStar(
+        //     startItem,
+        //     finishItem,
+        //     grid
+        // );
+
+        const AStar = new aStar(startItem, finishItem, grid);
+
+        const {visitedNodes, shortestPath }= AStar.run();
+
 
         animatePathfinding(visitedNodes, shortestPath.reverse());
     };
@@ -188,30 +192,23 @@ export default function Board() {
         let timerFactor = 1;
 
         while (visitedNodes.length) {
-            const { rowID, colID } = visitedNodes.shift();
-            let updatedProperty = { isVisited: true };
+            const visitedNode = visitedNodes.shift();
+            let updatedItem = { ...visitedNode, isVisited: true };
 
-            pathfinder.current.addTimer({
-                callback: () => {
-                    updateItem(rowID, colID, updatedProperty);
-                },
-                delay: timerInterval * timerFactor,
-            });
+            pathfinder.current.addTimer(() => {
+                updateItem(updatedItem.rowID, updatedItem.colID, updatedItem);
+            }, timerInterval * timerFactor);
 
             timerFactor += 1;
         }
 
         while (shortestPath.length) {
-            const { rowID, colID } = shortestPath.shift();
-            let updatedProperty = { isOnPath: true };
+            const pathNode = shortestPath.shift();
+            let updatedItem = { ...pathNode, isVisited: true, isOnPath: true };
 
-            pathfinder.current.addTimer({
-                callback: () => {
-                    updateItem(rowID, colID, updatedProperty);
-                },
-                delay: timerInterval * timerFactor,
-                timerFactor: timerFactor,
-            });
+            pathfinder.current.addTimer(() => {
+                updateItem(updatedItem.rowID, updatedItem.colID, updatedItem);
+            }, timerInterval * timerFactor);
 
             timerFactor += 1;
         }

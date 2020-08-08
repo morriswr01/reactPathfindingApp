@@ -26,9 +26,9 @@ class Provider extends Component {
     }
 
     // Can update any property of a single item eg: convert to wall, isVisited or OnPath
-    updateItem = (rowID, colID, newProperty) => {
+    updateItem = (rowID, colID, updatedItem) => {
         let grid = this.state.grid;
-        grid[rowID][colID] = { ...grid[rowID][colID], ...newProperty };
+        grid[rowID][colID] = { ...grid[rowID][colID], ...updatedItem };
         this.setState({ ...this.state, grid });
     };
 
