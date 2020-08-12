@@ -30,9 +30,9 @@ export default function Item(props) {
         ? "itemOnPath"
         : isVisited
         ? "itemVisited"
-        // : isWall
-        // ? "itemWall"
-        : "";
+        : // : isWall
+          // ? "itemWall"
+          "";
 
     return (
         <div
@@ -45,7 +45,7 @@ export default function Item(props) {
             <div className={`item ${itemType}`} id={`${colID}, ${rowID}`}>
                 <p className='distance'>
                     {isVisited ? (
-                        f !== Infinity ? (
+                        f !== Infinity && f !== undefined ? (
                             f
                         ) : (
                             distance

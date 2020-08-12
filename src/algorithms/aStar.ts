@@ -16,7 +16,7 @@ interface Node {
     f?: number;
 }
 
-export default class aStar {
+export default class AStar {
     grid: Array<Array<Node>>;
     startNode: Node;
     finishNode: Node;

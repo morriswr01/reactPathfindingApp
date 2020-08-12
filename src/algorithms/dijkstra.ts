@@ -13,64 +13,73 @@ interface Node {
     f?: number;
 }
 
-export default class djikstras {
+export default class Dijkstra {
     startNode: Node;
     finishNode: Node;
     grid: Array<Array<Node>>;
-    visitedNodes: Array<Node>;
 
     constructor(startNode: Node, finishNode: Node, grid: Array<Array<Node>>) {
         this.startNode = startNode;
         this.finishNode = finishNode;
         this.grid = grid;
-        this.visitedNodes = [];
     }
 
     run() {
-        let { startNode, finishNode, grid, visitedNodes, getAllNodes, sortNodesByDisatnce } = this;
+        let {
+            startNode,
+            finishNode,
+            grid,
+            getAllNodes,
+            sortNodesByDisatnce,
+        } = this;
 
-        let unvisitedNodes: Array<Node> = getAllNodes(grid);
+        let unvisitedNodes = getAllNodes(grid);
+        let visitedNodes = [];
         startNode.distance = 0;
 
-        while (unvisitedNodes.length) {
+        while (unvisitedNodes.length > 0) {
             unvisitedNodes = sortNodesByDisatnce(unvisitedNodes);
-            const currentNode: Node | undefined = unvisitedNodes.shift();
+            let currentNode: Node = unvisitedNodes.shift() as any;
 
-            if (currentNode?.isWall) {
-                continue;
-            }
-
-            // Check we are not trapped
-            if (currentNode?.distance === Infinity) {
-                break;
-            }
-
-            // Update state to show that current node has been visited
-            visitedNodes.push(currentNode);
-
-            // Check if we are at the finish
-            if (currentNode === finishNode) {
-                break;
-            }
-
-            // Find and update neighbours
-            unvisitedNodes.map((node) => {
-                const { rowID, colID } = node;
-                if (
-                    (colID === currentNode.colID &&
-                        Math.abs(rowID - currentNode.rowID) === 1) ||
-                    (rowID === currentNode.rowID &&
-                        Math.abs(colID - currentNode.colID) === 1)
-                ) {
-                    node.distance = currentNode.distance + 1;
-                    node.previousNode = currentNode;
+            if (currentNode !== undefined) {
+                if (currentNode?.isWall) {
+                    continue;
                 }
-                return node;
-            });
+
+                // Check we are not trapped
+                if (currentNode?.distance === Infinity) {
+                    break;
+                }
+
+                // Update state to show that current node has been visited
+                if (currentNode !== undefined) {
+                    visitedNodes.push(currentNode);
+                }
+
+                // Check if we are at the finish
+                if (currentNode === finishNode) {
+                    break;
+                }
+
+                // Find and update neighbours
+                unvisitedNodes.map((node) => {
+                    const { rowID, colID } = node;
+                    if (
+                        (colID === currentNode?.colID &&
+                            Math.abs(rowID - currentNode.rowID) === 1) ||
+                        (rowID === currentNode.rowID &&
+                            Math.abs(colID - currentNode.colID) === 1)
+                    ) {
+                        node.distance = currentNode.distance + 1;
+                        node.previousNode = currentNode;
+                    }
+                    return node;
+                });
+            }
         }
 
         // Get the optimal path from the completed djikstras pathfind
-        const shortestPath = getOptimalPath(finishNode);
+        const shortestPath: Array<Node> = this.getOptimalPath(finishNode);
         console.log(visitedNodes);
         console.log(shortestPath);
 
@@ -82,20 +91,20 @@ export default class djikstras {
             (nodeA, nodeB) => nodeA.distance - nodeB.distance
         );
     };
-    
+
     getAllNodes = (grid: Array<Array<Node>>) => {
         const nodesAsArray: Array<Node> = [];
-    
+
         grid.forEach((row) => {
             row.forEach((node) => nodesAsArray.push(node));
         });
-    
+
         return nodesAsArray;
     };
-    
+
     getOptimalPath = (finishNode: Node) => {
         const optPath: Array<Node> = [];
-    
+
         // Get optimal path
         let onOptPathNode = finishNode;
         while (onOptPathNode.previousNode !== null) {
@@ -103,7 +112,7 @@ export default class djikstras {
             optPath.push(onOptPathNode);
             onOptPathNode = onOptPathNode.previousNode;
         }
-    
+
         return optPath;
     };
 }

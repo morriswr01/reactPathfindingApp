@@ -4,8 +4,8 @@ import { Context } from "../../Provider";
 import Item from "../Item/Item";
 
 // Algorithms
-import dijkstra from "../../algorithms/dijkstra";
-import aStar from "../../algorithms/aStar.ts";
+import Dijkstra from "../../algorithms/Dijkstra";
+import AStar from "../../algorithms/AStar";
 import { DIJKSTRA, ASTAR } from "../../constants";
 import { Pathfinder } from "../../algorithms/Pathfinder";
 
@@ -157,16 +157,9 @@ export default function Board() {
         const finishItem =
             grid[finishNode.FINISH_NODE_ROW][finishNode.FINISH_NODE_COL];
 
-        // const { visitedNodes, shortestPath } = aStar(
-        //     startItem,
-        //     finishItem,
-        //     grid
-        // );
+        const aStar = new AStar(startItem, finishItem, grid);
 
-        const AStar = new aStar(startItem, finishItem, grid);
-
-        const {visitedNodes, shortestPath }= AStar.run();
-
+        const { visitedNodes, shortestPath } = aStar.run();
 
         animatePathfinding(visitedNodes, shortestPath.reverse());
     };
@@ -178,11 +171,9 @@ export default function Board() {
         const finishItem =
             grid[finishNode.FINISH_NODE_ROW][finishNode.FINISH_NODE_COL];
 
-        const { visitedNodes, shortestPath } = dijkstra(
-            startItem,
-            finishItem,
-            grid
-        );
+        const dijkstras = new Dijkstra(startItem, finishItem, grid);
+
+        const { visitedNodes, shortestPath } = dijkstras.run();
 
         animatePathfinding(visitedNodes, shortestPath.reverse());
     };
@@ -193,7 +184,9 @@ export default function Board() {
 
         while (visitedNodes.length) {
             const visitedNode = visitedNodes.shift();
+
             let updatedItem = { ...visitedNode, isVisited: true };
+            console.log(updatedItem);
 
             pathfinder.current.addTimer(() => {
                 updateItem(updatedItem.rowID, updatedItem.colID, updatedItem);
