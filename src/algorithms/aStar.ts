@@ -166,25 +166,25 @@ export default class AStar {
             neighbours.push(grid[y][x + 1]);
         }
 
-        // Southwest
-        if (grid[y - 1] && grid[y - 1][x - 1]) {
-            neighbours.push(grid[y - 1][x - 1]);
-        }
+        // // Southwest
+        // if (grid[y - 1] && grid[y - 1][x - 1]) {
+        //     neighbours.push(grid[y - 1][x - 1]);
+        // }
 
-        // Southeast
-        if (grid[y + 1] && grid[y + 1][x - 1]) {
-            neighbours.push(grid[y + 1][x - 1]);
-        }
+        // // Southeast
+        // if (grid[y + 1] && grid[y + 1][x - 1]) {
+        //     neighbours.push(grid[y + 1][x - 1]);
+        // }
 
-        // Northwest
-        if (grid[y - 1] && grid[y - 1][x + 1]) {
-            neighbours.push(grid[y - 1][x + 1]);
-        }
+        // // Northwest
+        // if (grid[y - 1] && grid[y - 1][x + 1]) {
+        //     neighbours.push(grid[y - 1][x + 1]);
+        // }
 
-        // Northeast
-        if (grid[y + 1] && grid[y + 1][x + 1]) {
-            neighbours.push(grid[y + 1][x + 1]);
-        }
+        // // Northeast
+        // if (grid[y + 1] && grid[y + 1][x + 1]) {
+        //     neighbours.push(grid[y + 1][x + 1]);
+        // }
 
         return neighbours;
     };
