@@ -86,13 +86,13 @@ export default class Dijkstra {
         return { visitedNodes, shortestPath };
     }
 
-    sortNodesByDisatnce = (unvisitedNodes: Array<Node>) => {
+    private sortNodesByDisatnce = (unvisitedNodes: Array<Node>) => {
         return unvisitedNodes.sort(
             (nodeA, nodeB) => nodeA.distance - nodeB.distance
         );
     };
 
-    getAllNodes = (grid: Array<Array<Node>>) => {
+    private getAllNodes = (grid: Array<Array<Node>>) => {
         const nodesAsArray: Array<Node> = [];
 
         grid.forEach((row) => {
@@ -102,7 +102,7 @@ export default class Dijkstra {
         return nodesAsArray;
     };
 
-    getOptimalPath = (finishNode: Node) => {
+    private getOptimalPath = (finishNode: Node) => {
         const optPath: Array<Node> = [];
 
         // Get optimal path
