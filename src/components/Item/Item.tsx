@@ -1,26 +1,24 @@
 import React from "react";
 
+import { ItemProps } from "./types";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfinity } from "@fortawesome/free-solid-svg-icons";
 
 import "./Item.scss";
 
-export default function Item(props) {
+const Item: React.FC<ItemProps> = ({ node, onMouseDown, onMouseEnter, onMouseLeave, onMouseUp}) => {
+
     const {
         isFinish,
         isStart,
         isVisited,
         isOnPath,
-        isWall,
         rowID,
         colID,
-        onMouseDown,
-        onMouseEnter,
-        onMouseLeave,
-        onMouseUp,
         distance,
         f,
-    } = props;
+    } = node;
 
     const itemType = isFinish
         ? "itemFinish"
@@ -30,17 +28,15 @@ export default function Item(props) {
         ? "itemOnPath"
         : isVisited
         ? "itemVisited"
-        : // : isWall
-          // ? "itemWall"
-          "";
+        : "";
 
     return (
         <div
             className='gridSquare'
-            onMouseDown={() => onMouseDown(rowID, colID)}
-            onMouseEnter={() => onMouseEnter(rowID, colID)}
-            onMouseLeave={() => onMouseLeave(rowID, colID)}
-            onMouseUp={() => onMouseUp(rowID, colID)}
+            onMouseDown={() => onMouseDown({ rowID, colID })}
+            onMouseEnter={() => onMouseEnter({ rowID, colID })}
+            onMouseLeave={() => onMouseLeave({ rowID, colID })}
+            onMouseUp={() => onMouseUp({ rowID, colID })}
         >
             <div className={`item ${itemType}`} id={`${colID}, ${rowID}`}>
                 <p className='distance'>
@@ -58,3 +54,5 @@ export default function Item(props) {
         </div>
     );
 }
+
+export default Item;

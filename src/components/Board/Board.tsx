@@ -1,11 +1,14 @@
 import React, { useState, useContext, useRef } from "react";
 import { Context } from "../../Provider";
 
+import Node from "../../utils/interfaces/Node";
+import ItemCoordinates from "../../utils/interfaces/ItemCoordinates";
+
 import Item from "../Item/Item";
 
 // Algorithms
-import Dijkstra from "../../algorithms/Dijkstra";
-import AStar from "../../algorithms/AStar";
+import Dijkstra from "../../algorithms/dijkstra";
+import AStar from "../../algorithms/aStar";
 import { DIJKSTRA, ASTAR } from "../../constants";
 import { Pathfinder } from "../../algorithms/Pathfinder";
 
@@ -36,7 +39,7 @@ export default function Board() {
         updateFinish,
         updateSelectedAlgorithm,
     } = context;
-    const pathfinder = useRef(null);
+    const pathfinder = useRef<Pathfinder | null>(null);
 
     const [isPaused, setIsPaused] = useState(false);
     const [isRunning, setIsRunning] = useState(false);
@@ -45,7 +48,9 @@ export default function Board() {
     const [movingStart, setMovingStart] = useState(false);
     const [movingFinish, setMovingFinish] = useState(false);
 
-    const handleMouseDown = (rowID, colID) => {
+    const handleMouseDown = (coords: ItemCoordinates) => {
+        const { rowID, colID } = coords;
+
         if (grid[rowID][colID].isStart) {
             setMovingStart(true);
         } else if (grid[rowID][colID].isFinish) {
@@ -55,13 +60,15 @@ export default function Board() {
             const newClass = !grid[rowID][colID].isWall
                 ? "item itemWall"
                 : "item";
-            document.getElementById(`${colID}, ${rowID}`).className = newClass;
+            document.getElementById(`${colID}, ${rowID}`)!.className = newClass;
             updateItem(rowID, colID, newProperty);
         }
         setMouseDown(true);
     };
 
-    const handleMouseEnter = (rowID, colID) => {
+    const handleMouseEnter = (coords: ItemCoordinates) => {
+        const { rowID, colID } = coords;
+
         if (movingStart) {
             const newProperty = { isStart: true };
             updateItem(rowID, colID, newProperty);
@@ -70,14 +77,16 @@ export default function Board() {
             updateItem(rowID, colID, newProperty);
         } else if (mouseDown) {
             if (!grid[rowID][colID].isFinish && !grid[rowID][colID].isStart) {
-                document.getElementById(`${colID}, ${rowID}`).className =
+                document.getElementById(`${colID}, ${rowID}`)!.className =
                     "item itemWall";
                 newWall(grid[rowID][colID]);
             }
         }
     };
 
-    const handleMouseLeave = (rowID, colID) => {
+    const handleMouseLeave = (coords: ItemCoordinates) => {
+        const { rowID, colID } = coords;
+
         if (movingStart) {
             const newProperty = { isStart: false };
             updateItem(rowID, colID, newProperty);
@@ -87,7 +96,9 @@ export default function Board() {
         }
     };
 
-    const handleMouseUp = (rowID, colID) => {
+    const handleMouseUp = (coords: ItemCoordinates) => {
+        const { rowID, colID } = coords;
+
         if (movingStart) {
             updateStart(rowID, colID);
             setMovingStart(false);
@@ -103,7 +114,7 @@ export default function Board() {
     const start = () => {
         if (isPaused && isRunning) {
             console.log("Animation resumed...");
-            pathfinder.current.resumeTimers();
+            pathfinder.current?.resumeTimers();
         } else if (!isRunning) {
             pathfinder.current = new Pathfinder();
             runPathfindingAlgorithm(algorithm);
@@ -113,7 +124,7 @@ export default function Board() {
     };
 
     const pause = () => {
-        pathfinder.current.pauseTimers();
+        pathfinder.current!.pauseTimers();
         console.log("Animation paused...");
         setIsPaused(true);
     };
@@ -128,13 +139,13 @@ export default function Board() {
         }
     };
 
-    const setAlgorithm = (algorithm) => {
+    const setAlgorithm = (algorithm: String) => {
         if (!isRunning) {
             updateSelectedAlgorithm(algorithm);
         }
     };
 
-    const runPathfindingAlgorithm = (algorithm) => {
+    const runPathfindingAlgorithm = (algorithm: String) => {
         switch (algorithm) {
             case DIJKSTRA:
                 runDijkstras();
@@ -179,16 +190,20 @@ export default function Board() {
     };
 
     // Refactor while loop
-    const animatePathfinding = (visitedNodes, shortestPath) => {
+    const animatePathfinding = (
+        visitedNodes: Array<Node>,
+        shortestPath: Array<Node>
+    ) => {
         let timerFactor = 1;
 
         while (visitedNodes.length) {
-            const visitedNode = visitedNodes.shift();
+            // Definitely non-null so can be non-null asserted
+            const visitedNode: Node = visitedNodes.shift()!;
 
-            let updatedItem = { ...visitedNode, isVisited: true };
+            let updatedItem: Node = { ...visitedNode, isVisited: true };
             console.log(updatedItem);
 
-            pathfinder.current.addTimer(() => {
+            pathfinder.current!.addTimer(() => {
                 updateItem(updatedItem.rowID, updatedItem.colID, updatedItem);
             }, timerInterval * timerFactor);
 
@@ -196,10 +211,15 @@ export default function Board() {
         }
 
         while (shortestPath.length) {
-            const pathNode = shortestPath.shift();
-            let updatedItem = { ...pathNode, isVisited: true, isOnPath: true };
+            // Definitely non-null so can be non-null asserted
+            const pathNode: Node = shortestPath.shift()!;
+            let updatedItem: Node = {
+                ...pathNode,
+                isVisited: true,
+                isOnPath: true,
+            };
 
-            pathfinder.current.addTimer(() => {
+            pathfinder.current!.addTimer(() => {
                 updateItem(updatedItem.rowID, updatedItem.colID, updatedItem);
             }, timerInterval * timerFactor);
 
@@ -255,7 +275,7 @@ export default function Board() {
                                 step='100'
                                 id='speed'
                                 onChange={(e) => {
-                                    updateSpeed(500 - e.target.value);
+                                    updateSpeed(500 - parseInt(e.target.value));
                                 }}
                             ></input>
                         </div>
@@ -263,32 +283,13 @@ export default function Board() {
                 </header>
                 <div className='gridContainer'>
                     <div className='grid'>
-                        {grid.map((gridRow) => (
+                        {grid.map((gridRow: Array<Node>) => (
                             <div className='gridRow'>
-                                {gridRow.map((item) => {
-                                    const {
-                                        rowID,
-                                        colID,
-                                        isStart,
-                                        isFinish,
-                                        isVisited,
-                                        isOnPath,
-                                        isWall,
-                                        distance,
-                                        f,
-                                    } = item;
+                                {gridRow.map((item: Node) => {
                                     return (
                                         <Item
-                                            key={colID}
-                                            colID={colID}
-                                            rowID={rowID}
-                                            isStart={isStart}
-                                            isFinish={isFinish}
-                                            isVisited={isVisited}
-                                            isOnPath={isOnPath}
-                                            isWall={isWall}
-                                            f={f}
-                                            distance={distance}
+                                            key={item.colID}
+                                            node={item}
                                             onMouseDown={handleMouseDown}
                                             onMouseEnter={handleMouseEnter}
                                             onMouseLeave={handleMouseLeave}

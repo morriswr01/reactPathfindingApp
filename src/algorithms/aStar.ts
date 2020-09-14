@@ -1,20 +1,6 @@
-/* eslint-disable no-unused-vars */
-const PriorityQueue = require("javascript-priority-queue");
+import Node from "../utils/interfaces/Node";
 
-interface Node {
-    colID: number;
-    rowID: number;
-    isStart: boolean;
-    isVisited: boolean;
-    isFinish: boolean;
-    isWall: boolean;
-    isOnPath: boolean;
-    distance: number;
-    previousNode: Node;
-    isSeen?: boolean;
-    h?: number;
-    f?: number;
-}
+const PriorityQueue = require("javascript-priority-queue");
 
 export default class AStar {
     grid: Array<Array<Node>>;
