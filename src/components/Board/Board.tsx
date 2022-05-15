@@ -7,7 +7,7 @@ import ItemCoordinates from "../../utils/interfaces/ItemCoordinates";
 import Item from "../Item/Item";
 
 // Algorithms
-import Dijkstra from "../../algorithms/dijkstra";
+import Dijkstra from "../../algorithms/Dijkstras/dijkstra";
 import AStar from "../../algorithms/aStar";
 import { DIJKSTRA, ASTAR } from "../../constants";
 import { Pathfinder } from "../../algorithms/Pathfinder";

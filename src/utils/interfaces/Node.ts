@@ -7,8 +7,10 @@ export default interface Node {
     isWall: boolean;
     isOnPath: boolean;
     distance: number;
-    previousNode: Node;
+    previousNode: Node | null;
     isSeen?: boolean;
     h?: number;
     f?: number;
 }
+
+module.exports = Node;

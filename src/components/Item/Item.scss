@@ -1,8 +1,10 @@
 @import "../../styles/variables";
 
 .item {
-    width: 35px;
-    height: 35px;
+    width: 2vw;
+    height: 2vh;
+    min-height: 30px;
+    min-width: 30px;
     background-color: $purpleRain;
     color: $freezePurple;
     margin: 5px;
