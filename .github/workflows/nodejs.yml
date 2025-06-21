@@ -32,7 +32,7 @@ jobs:
     steps:
       - name: Print environment variables
         env:
-          AWS_ACCESS_KEY_ID_NOT_REALLY: ${{ secrets.AWS_ACCESS_KEY_ID_NOT_REALLY }}
+          AWS_ACCESS_KEY_ID_NOT_REALLY: ${{ vars.AWS_ACCESS_KEY_ID_NOT_REALLY }}
           AWS_SECRET_ACCESS_KEY_ID_NOT_REALLY: ${{ secrets.AWS_SECRET_ACCESS_KEY_ID_NOT_REALLY }}
         run: |
           echo "Access Key ID: $AWS_ACCESS_KEY_ID_NOT_REALLY"
