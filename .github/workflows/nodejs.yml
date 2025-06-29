@@ -5,6 +5,7 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+  workflow_dispatch:
 
 env:
   # Setting an environment variable with the value of a configuration variable
@@ -63,6 +64,5 @@ jobs:
           AWS_ACCESS_KEY_ID_NOT_REALLY: ${{ vars.AWS_ACCESS_KEY_ID_NOT_REALLY }}
           AWS_SECRET_ACCESS_KEY_ID_NOT_REALLY: ${{ secrets.AWS_SECRET_ACCESS_KEY_ID_NOT_REALLY }}
         run: |
-          echo "Access Key ID: $"
           echo "Access Key ID: $AWS_ACCESS_KEY_ID_NOT_REALLY"
           echo "Secret Key: $AWS_SECRET_ACCESS_KEY_ID_NOT_REALLY" 
